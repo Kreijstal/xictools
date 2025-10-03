@@ -30,7 +30,7 @@ ITOPOK = --enable-itopok=no
 
 # Graphics package.  The programs can build with GTK2, GTK3, Qt5, and
 # Qt6.  GTK2 is still the reference graphics system and is recommended
-# for actual work.  Qt support is in "beta test" and will replace GTK. 
+# for actual work.  Qt support is in "beta test" and will replace GTK.
 # Ignore GTK3, it can build but has serious flaws.  Virtually all GTK
 # functionality has been ported to Qt and at present fine tuning and
 # bug fixing is being done.  Bug reports and comments would be
@@ -41,7 +41,7 @@ ITOPOK = --enable-itopok=no
 # server-mode only, and WRspice will be command-line only.
 #
 # To select a graphics library, uncomment exactly one of the examples
-# below, or create your own assignment appropriate for your computer. 
+# below, or create your own assignment appropriate for your computer.
 # Most of the time this variable can be set to something like
 # "--enable-gtk2=yes", which should always be true for GTK if the
 # pkg-config utility is working.  If can be set to the directory
@@ -64,6 +64,17 @@ ITOPOK = --enable-itopok=no
 # For Ubuntu-22.04, Debian 11
 #GFXLOC = --enable-qt5=/usr/lib/qt5
 #GFXLOC = --enable-gtk2=yes
+# Prefer qmake6 if present on PATH: detect qmake6 and set the Qt6 root
+# for configure. If not found, fall back to the previous default.
+QMAKE6 := $(shell command -v qmake6 2>/dev/null || true)
+ifeq ($(QMAKE6),)
+GFXLOC = --enable-qt6=yes
+else
+# If qmake6 is /path/to/qt6/bin/qmake6, take the parent of bin as the
+# Qt root (/path/to/qt6).
+QMAKE6_ROOT := $(patsubst %/bin/qmake6,%,$(QMAKE6))
+GFXLOC = --enable-qt6=$(QMAKE6_ROOT)
+endif
 
 # Windows setup.  UNCOMMENT for Windows!  Currently, the programs are
 # built under the MinGW64 environment in MSYS2.  Set this to the
@@ -88,7 +99,7 @@ ITOPOK = --enable-itopok=no
 
 # Uncomment this to NOT include the Mozy help system, http file
 # transfer, screen dumps, and package management.  This was used to
-# avoid the GNU-licensed code when building commercial packages. 
+# avoid the GNU-licensed code when building commercial packages.
 # Since the tools are now open-source this is not an issue.  There
 # presently is other GNU-licensed code within the tools, users need to
 # be aware of the license restrictions this imposes for non-open
@@ -135,7 +146,7 @@ XIC = mrouter xic
 ifdef HVSECURE
 SECURE = secure
 endif
-ifndef NOMOZY 
+ifndef NOMOZY
 ifdef GFXLOC
 MOZY = mozy
 endif
@@ -226,5 +237,3 @@ distclean:
 	        (cd $$a; $(MAKE) $@); \
 	    fi; \
 	done
-
-
