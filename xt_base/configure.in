@@ -237,7 +237,7 @@ if test $enable_cni != no; then
 fi
 )
 
-dnl  Enable (limited) support for Cadence psf simulation data file format. 
+dnl  Enable (limited) support for Cadence psf simulation data file format.
 dnl  This links to prebuilt libraries supplied with the oasis simulator
 dnl  integration toolkit, for integrating a simulator (such as WRspice)
 dnl  with the Cadence Analog Design Environment.  This is a Cadence
@@ -378,7 +378,7 @@ AC_PATH_PROG(acf1, autoconf, "")
 if test -z "$acf1"; then
     AC_PATH_PROG(acf2, autoconf-2.69, "")
     if test -z "$acf2"; then
-        echo "  Error: the \"autoconf\" program (\"autoconf-2.69\" in Cygwin)" 
+        echo "  Error: the \"autoconf\" program (\"autoconf-2.69\" in Cygwin)"
         echo "  is required and not found."
         exit 1
     else
@@ -487,7 +487,8 @@ MINGW)
     MSW="msw"
     EXESUFFIX=".exe"
     if test $NEED_FILTER = yes; then
-        FILTER="|sed -e s/C:// -e s///g"
+        FILTER="|sed -e s/C:// -e s/
+//g"
     fi
     MALLOC=
     OSNAME="MINGW"
@@ -558,7 +559,7 @@ dnl     # Upper-case the first letter of oname.
         if test -n "$major"; then
 dnl         # RedHat/CentOS/Fedora etc.
 dnl         # Convert non-digits to spaces, then
-dnl         # keep only the first token. 
+dnl         # keep only the first token.
 
             major=`echo $major | tr -c 0-9 " "`
             set -- $major
@@ -610,7 +611,7 @@ dnl         # Need to parse the file, grab the first name token, and
 dnl         # First version number.  Have to strip quotes.
 
             nm=`(while true; do
-                read foo 
+                read foo
                 if test -z "$foo"; then
                     break;
                 fi
@@ -654,7 +655,7 @@ dnl         # First version number.  Have to strip quotes.
     if test $DIST_SUFFIX = unknown; then
         echo "Architecture $OSNAME not supported, continuing anyway."
     fi
-    
+
     MALLOC='$(BASE)/lib/malloc.a'
     PIC_OPT="-fPIC"
     LFLAGS="-rdynamic"
@@ -811,6 +812,8 @@ elif test $GRPKG == QT5 -o $GRPKG == QT6 ; then
     elif test $GRPKG == QT6 ; then
         if test -f $QTBASE/bin/qmake6.exe; then
             qmake=$QTBASE/bin/qmake6
+        elif test -f $QTBASE/bin/qmake6; then
+            qmake=$QTBASE/bin/qmake6
         fi
     fi
     if test -z $qmake; then
@@ -918,6 +921,8 @@ dnl        done
             MOC="$QTBASE/share/qt6/bin/moc"
         elif test -f "$QTBASE/libexec/moc"; then
             MOC="$QTBASE/libexec/moc"
+        elif test -f "$QTBASE/lib/qt6/moc"; then
+            MOC="$QTBASE/lib/qt6/moc"
         else
             MOC="$QTBASE/bin/moc"
         fi
@@ -935,8 +940,10 @@ elif test $GRPKG == "GTK2"; then
             GRPREF=gtk
             if test -n "$EXESUFFIX" -a $NEED_FILTER = yes; then
 dnl             # Filter needed in Windows, pkg-config adds ^M that chokes g++.
-                tkcf="`${gtklocd}pkg-config --cflags gtk+-2.0 |sed -e s///g`"
-                tkl="`${gtklocd}pkg-config --libs gtk+-2.0 |sed -e s///g`"
+                tkcf="`${gtklocd}pkg-config --cflags gtk+-2.0 |sed -e s/
+//g`"
+                tkl="`${gtklocd}pkg-config --libs gtk+-2.0 |sed -e s/
+//g`"
             else
                 tkcf="`${gtklocd}pkg-config --cflags gtk+-2.0`"
                 tkl="`${gtklocd}pkg-config --libs gtk+-2.0`"
@@ -969,8 +976,10 @@ elif test $GRPKG == "GTK3"; then
             GRPREF=gtk
             if test -n "$EXESUFFIX" -a $NEED_FILTER = yes; then
 dnl             # Filter needed in Windows, pkg-config adds ^M that chokes g++.
-                tkcf="`${gtklocd}pkg-config --cflags gtk+-3.0 |sed -e s///g`"
-                tkl="`${gtklocd}pkg-config --libs gtk+-3.0 |sed -e s///g`"
+                tkcf="`${gtklocd}pkg-config --cflags gtk+-3.0 |sed -e s/
+//g`"
+                tkl="`${gtklocd}pkg-config --libs gtk+-3.0 |sed -e s/
+//g`"
             else
                 tkcf="`${gtklocd}pkg-config --cflags gtk+-3.0`"
                 tkl="`${gtklocd}pkg-config --libs gtk+-3.0`"
@@ -1139,7 +1148,7 @@ AC_MSG_RESULT($ac_cv_type_$1)
 if test $ac_cv_type_$1 = no; then
     AC_DEFINE($1, $2)
 fi
-]) 
+])
 AC_CHECK_SOCKTYPE(socklen_t, int)
 
 AC_CHECK_TYPE(int64_t, long long)
@@ -1404,7 +1413,7 @@ AC_CHECK_FUNCS(
     unlink)
 
 tmplibs=$LIBS
-LIBS="$LIBS $CURSES" 
+LIBS="$LIBS $CURSES"
 AC_CHECK_FUNCS(tgetent tigetstr)
 LIBS=$tmplibs
 
@@ -1450,7 +1459,7 @@ rm -rf conftest*
 dnl  Configure for local malloc.  The local allocation system has
 dnl  problems with Windows, OS X, AIX.
 if test x$MALLOC != x; then
-    if test -f ./malloc/local_malloc.cc; then  
+    if test -f ./malloc/local_malloc.cc; then
         echo '#define HAVE_LOCAL_ALLOCATOR 1'>> confdefs.h
     fi
 fi
@@ -1616,4 +1625,3 @@ echo "with_oa) echo $with_oa;;" >> info.sh
 echo "innoloc) echo $innoloc;;" >> info.sh
 echo "esac"                     >> info.sh
 chmod 755 info.sh
-

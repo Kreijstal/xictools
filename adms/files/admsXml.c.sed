@@ -639,7 +639,7 @@ static void parseva (const int argc,const char** argv,char* myverilogamsfile)
     if(root()->_dbg_vla==admse_yes)
       adms_veriloga_setint_yydebug(1);
     adms_veriloga_setfile_input(ifh);
-    if(verilogaparse(root()))
+    if(verilogaparse())
       adms_message_fatal(("parse Verilog-AMS preprocessed file '%s' failed\n",mytmpverilogamsfile))
     else
       adms_message_verbose(("No error found during parsing\n"))
